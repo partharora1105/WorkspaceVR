@@ -25,5 +25,5 @@ The following are the controls to navigate in the simulation:
 <li>Trigger - Next (also if not a good response)</li>
 <li>Grip - no response </li>
 <li>A - Appropriate Response</li>
-<li>B - Iappropriate Response</li>
+<li>B - Inappropriate Response</li>
 </ul>
