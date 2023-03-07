@@ -17,13 +17,3 @@ WorkspaceVR-Simulation is a virtual reality platform that allows users to simula
   <img src="/github-images/1.png">
   <br>Virtual Cafe Scene
 </p>
-<h2> Script </h2>
-You can access the script <a href="https://docs.google.com/document/d/13eSPhkihrEYc4BtKwBfjZaoda3xNYMFxUdOkCYKDtCM/edit?pli=1">here</a>.
-The following are the controls to navigate in the simulation:
-<ul>
-
-<li>Trigger - Next (also if not a good response)</li>
-<li>Grip - no response </li>
-<li>A - Appropriate Response</li>
-<li>B - Inappropriate Response</li>
-</ul>

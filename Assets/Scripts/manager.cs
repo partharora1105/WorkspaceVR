@@ -10,6 +10,7 @@ public class manager : MonoBehaviour
     [SerializeField] private TextMeshProUGUI txt;
     [SerializeField] private GameObject yellowCover;
     [SerializeField] private GameObject latte;
+    [SerializeField] private GameObject blinkLight;
     public InputActionReference trigger = null;
     public InputActionReference primary = null;
     public InputActionReference secondary = null;
@@ -24,12 +25,14 @@ public class manager : MonoBehaviour
     [SerializeField] private AudioClip customerYouToo;
     [SerializeField] private AudioClip managerMixer;
     [SerializeField] private AudioClip customerObjects;
+    [SerializeField] private AudioClip customerObjects2;
     [Header("Development")]
     [SerializeField] private bool appropriate;
     [SerializeField] private bool inappropriate;
     [SerializeField] private bool notAGoodResponse;
     [SerializeField] private bool noResponse;
     public bool next;
+    private bool shouldBlink;
 
     private  Animator customerAnimator;
     private bool isWalking;
@@ -50,7 +53,7 @@ public class manager : MonoBehaviour
         customerAnimator = customer.GetComponent<Animator>();
         isWalking = false;
         next = false;
-        notAGoodResponse = true;
+        appropriate = true;
         count = 1;
         uiCanvas.SetActive(false);
         startPos = customer.transform.position;
@@ -71,6 +74,13 @@ public class manager : MonoBehaviour
             count++;
             next = false;
         }
+        if (noResponse)
+        {
+            managerAvatar.GetComponent<ReadyPlayerMe.VoiceHandler>().PlayAudioClip(managerMixer);
+            managerAvatar.GetComponent<Animator>().SetTrigger("startTalking");
+            noResponse = !noResponse;
+        }
+        if (shouldBlink) Invoke("blink", 1.0f);
     }
 
     private void setNext(InputAction.CallbackContext context)
@@ -91,9 +101,8 @@ public class manager : MonoBehaviour
     }
     private void setNoResponse(InputAction.CallbackContext context)
     {
-        noResponse = true;
-        notAGoodResponse = false;
-        next = true;
+        managerAvatar.GetComponent<ReadyPlayerMe.VoiceHandler>().PlayAudioClip(managerMixer);
+        managerAvatar.GetComponent<Animator>().SetTrigger("startTalking");
     }
 
     private void performAction()
@@ -112,23 +121,37 @@ public class manager : MonoBehaviour
         else if (count == 3 || count == 8 || count == 13 || count == 18)
         {
             startWalking();
+            shouldBlink = true;
         }
         else if (count == 4 || count == 9)
         {
             customer.GetComponent<ReadyPlayerMe.VoiceHandler>().PlayAudioClip(customerThanks);
+            shouldBlink = false;
+
         }
         else if (count == 5 || count == 10)
         {
             customer.GetComponent<ReadyPlayerMe.VoiceHandler>().PlayAudioClip(customerYouToo); 
         }
-        else if (count == 14 || count == 19)
+        else if (count == 14)
         {
             customer.GetComponent<ReadyPlayerMe.VoiceHandler>().PlayAudioClip(customerObjects);
             customer.GetComponent<Animator>().SetTrigger("startTalking");
-            notAGoodResponse = true;
+            notAGoodResponse = false;
             noResponse = false;
-            appropriate = false;
+            appropriate = true;
             inappropriate = false;
+            shouldBlink = false;
+        }
+        else if (count == 19)
+        {
+            customer.GetComponent<ReadyPlayerMe.VoiceHandler>().PlayAudioClip(customerObjects2);
+            customer.GetComponent<Animator>().SetTrigger("startTalking");
+            notAGoodResponse = false;
+            noResponse = false;
+            appropriate = true;
+            inappropriate = false;
+            shouldBlink = false;
         }
         else if (count == 15 || count == 20)
         {
@@ -151,6 +174,11 @@ public class manager : MonoBehaviour
             yellowCover.SetActive(false);
         }
 
+    }
+
+    private void blink()
+    {
+        blinkLight.SetActive(!blinkLight.activeSelf);
     }
 
     private void startWalking()
